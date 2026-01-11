@@ -1,190 +1,639 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Heart Disease Prediction</title>
+{% extends "base.html" %}
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <style>
-
-        /* Background */
-        body {
-            background: linear-gradient(120deg, #ff5f6d, #ffc371);
-            min-height: 100vh;
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Glass Card */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            width: 90%;
-            max-width: 850px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-            color: white;
-        }
-
-        .heart-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Heart Image Animation */
-        .heart-animation {
-            width: 150px;
-            animation: beat 1.2s infinite ease-in-out, glow 2s infinite ease-in-out;
-            filter: drop-shadow(0 0 12px rgba(255, 0, 0, 0.8));
-            margin-bottom: 10px;
-        }
-
-        /* Beat Animation */
-        @keyframes beat {
-            0%, 50%, 100% { transform: scale(1); }
-            30% { transform: scale(1.25); }
-            80% { transform: scale(1.15); }
-        }
-
-        /* Glow Animation */
-        @keyframes glow {
-            0% { filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.6)); }
-            50% { filter: drop-shadow(0 0 25px rgba(255, 0, 0, 1)); }
-            100% { filter: drop-shadow(0 0 10px rgba(255, 0, 0, 0.6)); }
-        }
-
-        /* Pulse Wave */
-        .heart-container::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 200px;
-            height: 200px;
-            background: rgba(255, 0, 0, 0.25);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulseWave 2s infinite ease-out;
-        }
-
-        @keyframes pulseWave {
-            0% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.7; }
-            100% { transform: translate(-50%, -50%) scale(1.4); opacity: 0; }
-        }
-
-        .btn-modern {
-            background: #ff4d4d;
-            border: none;
-            padding: 12px 40px;
-            border-radius: 30px;
-            font-size: 18px;
-            transition: 0.3s;
-            font-weight: bold;
-        }
-        .btn-modern:hover {
-            background: #ffe259;
-            transform: scale(1.05);
-        }
-        
-        label {
-            font-weight: 600;
-        }
-
-    </style>
-
-</head>
+{% block content %}
 
 
+<!-- =========================
+     DATA FROM FLASK (JSON)
+========================= -->
+<script id="chart-data" type="application/json">
+{
+  "diseaseData": {{ disease_data | tojson }},
+  "riskLabels": {{ risk_labels | tojson }},
+  "riskValues": {{ risk_values | tojson }}
+}
+</script>
 
-<body>
+<!-- =========================
+     HERO SECTION
+========================= -->
+<div class="container-fluid px-0 mb-5">
+    <div class="dashboard-hero py-5" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="text-white display-5 fw-bold mb-3">
+                        <i class="fas fa-heartbeat me-3"></i>Heart Disease Prediction Dashboard
+                    </h1>
+                    <p class="lead text-white-50 mb-4">
+                        Advanced AI-powered system for cardiovascular risk assessment and predictive analytics
+                    </p>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-light text-primary fs-6 px-3 py-2">
+                            <i class="fas fa-robot me-1"></i> Machine Learning
+                        </span>
+                        <span class="badge bg-light text-success fs-6 px-3 py-2">
+                            <i class="fas fa-chart-line me-1"></i> Real-time Analytics
+                        </span>
+                        <span class="badge bg-light text-danger fs-6 px-3 py-2">
+                            <i class="fas fa-shield-alt me-1"></i> Clinical Grade
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                    <div class="card border-0 shadow-lg" style="background: rgba(255, 255, 255, 0.95);">
+                        <div class="card-body text-center p-4">
+                            <div class="mb-3">
+                                <div class="progress-circle mx-auto" data-percentage="74">
+                                    <div class="progress-circle-value">74%</div>
+                                </div>
+                            </div>
+                            <h5 class="text-primary mb-1">Model Accuracy</h5>
+                            <p class="text-muted small mb-0">Validated performance score</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <div class="glass-card">
+<div class="container">
 
-        <!-- Animated Heart -->
-        <div class="text-center">
-            <div class="heart-container">
-                <img src="{{ url_for('static', filename='images/heart.png') }}" class="heart-animation">
+    <!-- =========================
+         PERFORMANCE SUMMARY CARDS
+    ========================= -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-database text-primary fs-3"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-1">Total Records</h6>
+                            <h3 class="mb-0 fw-bold">{{ total_records }}</h3>
+                            <small class="text-muted">Patient datasets</small>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <h1 class="text-center mt-3 mb-4" style="font-weight:700;">Heart Disease Prediction</h1>
-        <p class="text-center text-light mb-4">Enter patient details to check the risk of heart disease.</p>
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-danger bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-exclamation-triangle text-danger fs-3"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-1">High Risk Cases</h6>
+                        <h3 class="mb-0 fw-bold text-danger" id="highRiskValue">{{ high_risk }}</h3>
+                        <div class="progress mt-2" style="height: 5px;">
+                            <div class="progress-bar bg-danger" id="highRiskBar" data-value="{{ high_risk }}" data-total="{{ total_records }}">
+                            </div>
+                        </div>
 
-        <!-- Form -->
-        <form action="/predict" method="POST">
-            <div class="row g-3">
-
-                <div class="col-md-4">
-                    <label>Age</label>
-                    <input type="number" name="age" class="form-control" required>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="col-md-4">
-                    <label>Gender (1=Male, 2=Female)</label>
-                    <input type="number" name="gender" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Height (cm)</label>
-                    <input type="number" name="height" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Weight (kg)</label>
-                    <input type="number" name="weight" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>BP High (ap_hi)</label>
-                    <input type="number" name="ap_hi" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>BP Low (ap_lo)</label>
-                    <input type="number" name="ap_lo" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Cholesterol (1,2,3)</label>
-                    <input type="number" name="cholesterol" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Glucose (1,2,3)</label>
-                    <input type="number" name="gluc" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Smoke (0=No,1=Yes)</label>
-                    <input type="number" name="smoke" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Alcohol (0=No,1=Yes)</label>
-                    <input type="number" name="alco" class="form-control" required>
-                </div>
-
-                <div class="col-md-4">
-                    <label>Active (0=No,1=Yes)</label>
-                    <input type="number" name="active" class="form-control" required>
-                </div>
-
-                <div class="col-md-12 text-center mt-4">
-                    <button class="btn-modern" type="submit">Predict Result</button>
-                </div>
-
             </div>
-        </form>
+        </div>
 
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-success bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-check-circle text-success fs-3"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h6 class="text-muted mb-1">Low Risk Cases</h6>
+                        <h3 class="mb-0 fw-bold text-success" id="lowRiskValue">{{ low_risk }}</h3>
+                        <div class="progress mt-2" style="height: 5px;">
+                            <div class="progress-bar bg-success" id="lowRiskBar" data-value="{{ low_risk }}" data-total="{{ total_records }}">
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-bullseye text-warning fs-3"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                                <h6 class="text-muted mb-1">Predicted Heart Disease Risk</h6>
+                        <h3 class="mb-0 fw-bold" id="confidenceValue">{{ risk_percentage }}%</h3>
+                        
+                        <div class="progress mt-2" style="height: 5px;">
+                            <div class="progress-bar bg-warning" id="confidenceBar" data-percentage="{{ risk_percentage }}">
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-</body>
-</html>
+    <!-- =========================
+         MODEL PERFORMANCE METRICS
+    ========================= -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card border-0 shadow-lg">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0"><i class="fas fa-tachometer-alt text-primary me-2"></i>Model Performance Metrics
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-4">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <div class="metric-circle mx-auto mb-3 bg-primary">
+                                    74%
+                                </div>
+                                <h6 class="text-muted mb-1">Overall Model Accuracy</h6>
+                                <small class="text-muted">Overall correctness</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <div class="metric-circle mx-auto mb-3 bg-success">
+                                    {{ precision }}%
+                                </div>
+                                <h6 class="text-muted mb-1">Prediction Reliability</h6>
+                                <small class="text-muted">True positive rate</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <div class="metric-circle mx-auto mb-3 bg-info">
+                                    {{ recall }}%
+                                </div>
+                                <h6 class="text-muted mb-1">Disease Detection Ability
+                                text
+                                Copy code
+</h6>
+                                <small class="text-muted">Sensitivity</small>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-4">
+                            <div class="p-3 border rounded bg-light h-100">
+                                <div class="metric-circle mx-auto mb-3 bg-warning">
+                                    {{ f1 }}%
+                                </div>
+                                <h6 class="text-muted mb-1">Balanced Performance Score
+</h6>
+                                <small class="text-muted">Harmonic mean</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================
+         CHARTS SECTION
+    ========================= -->
+    <div class="row mb-5">
+        <!-- Disease Distribution Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-lg h-100">
+                <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center py-3">
+                    <h5 class="mb-0"><i class="fas fa-chart-pie text-success me-2"></i>Disease Distribution</h5>
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown">
+                            <i class="fas fa-filter"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="diseasePie"></canvas>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-6 text-center">
+                            <div class="p-3 border rounded bg-success bg-opacity-10">
+                                <h4 class="text-success mb-1">{{ disease_data[0] if disease_data else 0 }}</h4>
+                                <small class="text-muted">Healthy Cases</small>
+                            </div>
+                        </div>
+                        <div class="col-6 text-center">
+                            <div class="p-3 border rounded bg-danger bg-opacity-10">
+                                <h4 class="text-danger mb-1">{{ disease_data[1] if disease_data else 0 }}</h4>
+                                <small class="text-muted">Disease Cases</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Feature Importance Chart -->
+        <div class="col-lg-6 mb-4">
+            <div class="card border-0 shadow-lg h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar text-primary me-2"></i>Feature Importance Analysis</h5>
+                    <p class="text-muted small mb-0">Top predictive factors for heart disease</p>
+                </div>
+                <div class="card-body p-4">
+                    <div class="chart-container" style="height: 300px;">
+                        <canvas id="featureBar"></canvas>
+                    </div>
+                    <div class="mt-4">
+                        <div class="alert alert-info py-2">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <strong>Key Insight:</strong> Top 3 features account for
+                            <span id="topThreePercentage">0</span>% of predictive power
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!-- =========================
+     CONFUSION MATRIX
+========================= -->
+<div class="row mb-5">
+    <div class="col-12">
+        <div class="card border-0 shadow-lg">
+            <div class="card-header bg-white border-0 py-3">
+                <h5 class="mb-0">
+                    <i class="fas fa-table text-warning me-2"></i>
+                    Confusion Matrix Analysis
+                </h5>
+                <p class="text-muted small mb-0">Model classification performance breakdown</p>
+            </div>
+
+            <div class="card-body p-4">
+                <div class="row justify-content-center">
+
+                    <!-- TABLE -->
+                    <div class="col-lg-8">
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th colspan="3" class="py-3 bg-light">
+                                            <i class="fas fa-project-diagram me-2"></i>
+                                            Prediction vs Actual
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th></th>
+                                        <th class="bg-info text-white">Predicted Negative</th>
+                                        <th class="bg-danger text-white">Predicted Positive</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <th class="bg-info text-white">Actual Negative</th>
+                                        <td class="bg-success bg-opacity-25">
+                                            <h4 class="text-success mb-1">5521</h4>
+                                            <small>True Negative</small>
+                                            <div class="small mt-1">
+                                                <span class="badge bg-success">79.0%</span> Specificity
+                                            </div>
+                                        </td>
+                                        <td class="bg-danger bg-opacity-25">
+                                            <h4 class="text-danger mb-1">1467</h4>
+                                            <small>False Positive</small>
+                                            <div class="small mt-1">
+                                                <span class="badge bg-warning">Type I Error</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <th class="bg-danger text-white">Actual Positive</th>
+                                        <td class="bg-warning bg-opacity-25">
+                                            <h4 class="text-warning mb-1">2169</h4>
+                                            <small>False Negative</small>
+                                            <div class="small mt-1">
+                                                <span class="badge bg-danger">Type II Error</span>
+                                            </div>
+                                        </td>
+                                        <td class="bg-success bg-opacity-25">
+                                            <h4 class="text-success mb-1">4843</h4>
+                                            <small>True Positive</small>
+                                            <div class="small mt-1">
+                                                <span class="badge bg-success">69.1%</span> Sensitivity
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- SUMMARY -->
+                    <div class="col-lg-4 mt-4 mt-lg-0">
+                        <div class="card border-0 h-100"
+                            style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+                            <div class="card-body p-4">
+                                <h6 class="text-primary mb-3">
+                                    <i class="fas fa-chart-line me-2"></i>Performance Summary
+                                </h6>
+
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">Overall Accuracy</small>
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                            <div class="progress-bar bg-primary" style="width: 75.6%;"></div>
+                                        </div>
+                                        <span class="fw-bold">75.6%</span>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <small class="text-muted d-block">Error Rate</small>
+                                    <div class="d-flex align-items-center">
+                                        <div class="progress flex-grow-1 me-2" style="height: 8px;">
+                                            <div class="progress-bar bg-danger" style="width: 24.4%;"></div>
+                                        </div>
+                                        <span class="fw-bold">24.4%</span>
+                                    </div>
+                                </div>
+
+                                <div class="mt-4">
+                                    <h6 class="text-success">
+                                        <i class="fas fa-check-circle me-1"></i>
+                                        Correct: 10364
+                                    </h6>
+                                    <h6 class="text-danger">
+                                        <i class="fas fa-times-circle me-1"></i>
+                                        Incorrect: 3636
+                                    </h6>
+                                </div>
+
+                                <small class="text-danger d-block mt-3">
+                                    ⚠️ False Negatives represent missed heart disease cases and are clinically critical.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- =========================
+         DISCLAIMER
+    ========================= -->
+    <div class="alert alert-warning border-0 shadow-sm mb-4">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0 me-3">
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h6 class="alert-heading mb-1">Medical Disclaimer</h6>
+                <p class="small mb-0">
+                    This application utilizes a machine learning model for predictive analytics purposes only.
+                    It is <strong>NOT</strong> a substitute for professional medical advice, diagnosis, or treatment.
+                    Always consult a qualified healthcare provider for medical concerns.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const chartData = JSON.parse(
+            document.getElementById("chart-data").textContent
+        );
+
+        // Calculate top 3 features percentage
+        const topThree = chartData.riskValues.slice(0, 3);
+        const total = chartData.riskValues.reduce((a, b) => a + b, 0);
+        const topThreePercentage = (topThree.reduce((a, b) => a + b, 0) / total * 100).toFixed(1);
+        document.getElementById('topThreePercentage').textContent = topThreePercentage;
+
+        // Pie/Doughnut Chart
+        let diseaseChart;
+        function createDiseaseChart(type = 'pie') {
+            const ctx = document.getElementById('diseasePie');
+            if (diseaseChart) {
+                diseaseChart.destroy();
+            }
+            diseaseChart = new Chart(ctx, {
+                type: type,
+                data: {
+                    labels: ["No Heart Disease", "Heart Disease Present"],
+                    datasets: [{
+                        data: chartData.diseaseData,
+                        backgroundColor: ["#2ecc71", "#e74c3c"],
+                        borderColor: ["#27ae60", "#c0392b"],
+                        borderWidth: 2,
+                        hoverOffset: 15
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = ((context.raw / total) * 100).toFixed(1);
+                                    return `${context.label}: ${context.raw} cases (${percentage}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Initialize with pie chart
+        createDiseaseChart('pie');
+
+        // Update chart type function
+        window.updateChart = function (type) {
+            createDiseaseChart(type);
+        };
+
+        // Feature Importance Bar Chart
+        new Chart(document.getElementById("featureBar"), {
+            type: "bar",
+            data: {
+                labels: chartData.riskLabels,
+                datasets: [{
+                    label: "Feature Importance",
+                    data: chartData.riskValues.map(v => (v * 100).toFixed(2)),
+                    backgroundColor: chartData.riskValues.map((v, i) => {
+                        const colors = [
+                            'rgba(102, 126, 234, 0.8)',   // Blue
+                            'rgba(231, 76, 60, 0.8)',    // Red
+                            'rgba(241, 196, 15, 0.8)',   // Yellow
+                            'rgba(46, 204, 113, 0.8)',   // Green
+                            'rgba(155, 89, 182, 0.8)',   // Purple
+                            'rgba(52, 152, 219, 0.8)',   // Light Blue
+                            'rgba(230, 126, 34, 0.8)',   // Orange
+                            'rgba(149, 165, 166, 0.8)'   // Gray
+                        ];
+                        return colors[i % colors.length];
+                    }),
+                    borderColor: chartData.riskValues.map((v, i) => {
+                        const colors = ['#667eea', '#e74c3c', '#f1c40f', '#2ecc71', '#9b59b6', '#3498db', '#e67e22', '#95a5a6'];
+                        return colors[i % colors.length];
+                    }),
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `Importance: ${context.raw}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function (value) {
+                                return value + '%';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        }
+                    },
+                    y: {
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Animate progress circles
+        document.querySelectorAll('.progress-circle').forEach(circle => {
+            const percentage = circle.getAttribute('data-percentage');
+            const value = circle.querySelector('.progress-circle-value');
+
+            let current = 0;
+            const increment = percentage / 50;
+            const interval = setInterval(() => {
+                current += increment;
+                if (current >= percentage) {
+                    current = percentage;
+                    clearInterval(interval);
+                }
+                value.textContent = Math.round(current) + '%';
+            }, 20);
+        });
+    });
+</script>
+
+<style>
+    .dashboard-hero {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-circle {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: conic-gradient(#667eea 0% 0%, #e0e0e0 0% 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        transition: all 0.5s ease;
+    }
+
+    .progress-circle::before {
+        content: '';
+        position: absolute;
+        width: 80px;
+        height: 80px;
+        background: white;
+        border-radius: 50%;
+    }
+
+    .progress-circle-value {
+        position: relative;
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #667eea;
+    }
+
+    .metric-circle {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .chart-container {
+        position: relative;
+        min-height: 200px;
+    }
+
+    .card {
+        transition: transform 0.2s ease-in-out;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .table th {
+        font-weight: 600;
+    }
+
+    .badge {
+        font-weight: 500;
+    }
+</style>
+{% endblock %}

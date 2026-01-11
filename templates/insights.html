@@ -1,0 +1,679 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Header Section -->
+<div class="container-fluid px-0">
+    <div class="dashboard-header py-4 mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="text-white mb-2" style="font-weight: 800;">🫀 Heart Disease Risk Insights</h1>
+                    <p class="lead text-white-50 mb-0">Pattern-based analysis of cardiovascular health indicators with
+                        interactive visualizations</p>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <span class="badge bg-light text-primary fs-6 px-3 py-2 shadow-sm">
+                        <i class="fas fa-heartbeat me-2"></i>Health Analytics
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Stats Overview Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-start border-5 border-primary shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-primary bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-user-clock text-primary fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Primary Risk Factor</h6>
+                            <h4 class="mb-0">Age</h4>
+                            <small class="text-success">32% impact</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-start border-5 border-danger shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-danger bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-tachometer-alt text-danger fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Blood Pressure</h6>
+                            <h4 class="mb-0">High Risk</h4>
+                            <small class="text-danger">28% impact</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-start border-5 border-warning shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-warning bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-chart-line text-warning fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Cholesterol</h6>
+                            <h4 class="mb-0">Elevated</h4>
+                            <small class="text-warning">20% impact</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-3">
+            <div class="card border-start border-5 border-info shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="bg-info bg-opacity-10 p-3 rounded me-3">
+                            <i class="fas fa-running text-info fs-4"></i>
+                        </div>
+                        <div>
+                            <h6 class="text-muted mb-1">Lifestyle</h6>
+                            <h4 class="mb-0">Modifiable</h4>
+                            <small class="text-info">20% impact</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Visualization Section -->
+    <div class="row mb-4">
+        <div class="col-lg-8 mb-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="mb-0"><i class="fas fa-chart-bar text-primary me-2"></i>Age vs. Heart Disease Prevalence
+                    </h5>
+                    <p class="text-muted small mb-0">Cardiovascular risk increases significantly with age</p>
+                </div>
+                <div class="card-body pt-0">
+                    <div class="chart-container" style="position: relative; height: 300px;">
+                        <canvas id="ageChart"></canvas>
+                    </div>
+                    <div class="mt-3">
+                        <div class="alert alert-info py-2 small mb-0">
+                            <i class="fas fa-info-circle me-1"></i>
+                            <strong>Insight:</strong> Risk doubles every decade after age 40. Regular screening
+                            recommended after 45.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 mb-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="mb-0"><i class="fas fa-heartbeat text-danger me-2"></i>Risk Distribution</h5>
+                    <p class="text-muted small mb-0">By blood pressure levels</p>
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <div class="chart-container flex-grow-1" style="position: relative; height: 200px;">
+                        <canvas id="bpChart"></canvas>
+                    </div>
+                    <div class="mt-3">
+                        <div class="progress" style="height: 10px;">
+                            <div class="progress-bar bg-success" style="width: 25%">Normal BP: 25%</div>
+                            <div class="progress-bar bg-danger" style="width: 75%">High BP: 75%</div>
+                        </div>
+                        <div class="mt-2">
+                            <span class="badge bg-danger">3x Higher Risk</span> with elevated blood pressure
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Middle Row Charts -->
+    <div class="row mb-4">
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="mb-0"><i class="fas fa-vial text-warning me-2"></i>Cholesterol & Glucose Levels</h5>
+                    <p class="text-muted small mb-0">Impact on cardiovascular risk</p>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 220px;">
+                        <canvas id="cholChart"></canvas>
+                    </div>
+                    <div class="row mt-3 text-center">
+                        <div class="col-6">
+                            <div class="p-2 border rounded bg-light">
+                                <small class="text-muted d-block">Normal Cholesterol</small>
+                                <span class="fw-bold text-success">30%</span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 border rounded bg-light">
+                                <small class="text-muted d-block">High Cholesterol</small>
+                                <span class="fw-bold text-danger">70%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <div class="card shadow-lg border-0 h-100">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="mb-0"><i class="fas fa-smoking text-secondary me-2"></i>Lifestyle Factors</h5>
+                    <p class="text-muted small mb-0">Modifiable risk indicators</p>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 220px;">
+                        <canvas id="lifeChart"></canvas>
+                    </div>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between small">
+                            <span><i class="fas fa-times-circle text-danger me-1"></i> Smoking</span>
+                            <span class="fw-bold">65% risk increase</span>
+                        </div>
+                        <div class="d-flex justify-content-between small mt-1">
+                            <span><i class="fas fa-couch text-warning me-1"></i> Inactivity</span>
+                            <span class="fw-bold">60% risk increase</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Importance -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="mb-0"><i class="fas fa-weight-hanging text-success me-2"></i>Model Feature Importance
+                    </h5>
+                    <p class="text-muted small mb-0">Relative contribution to heart disease prediction</p>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container" style="position: relative; height: 250px;">
+                        <canvas id="featureChart"></canvas>
+                    </div>
+                    <div class="row mt-3 text-center">
+                        <div class="col-md-2 col-4 mb-2">
+                            <div class="p-2 border rounded bg-primary bg-opacity-10">
+                                <small class="text-muted d-block">Age</small>
+                                <span class="fw-bold text-primary">32%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-4 mb-2">
+                            <div class="p-2 border rounded bg-danger bg-opacity-10">
+                                <small class="text-muted d-block">BP</small>
+                                <span class="fw-bold text-danger">28%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-4 mb-2">
+                            <div class="p-2 border rounded bg-warning bg-opacity-10">
+                                <small class="text-muted d-block">Cholesterol</small>
+                                <span class="fw-bold text-warning">20%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-4 mb-2">
+                            <div class="p-2 border rounded bg-info bg-opacity-10">
+                                <small class="text-muted d-block">Glucose</small>
+                                <span class="fw-bold text-info">12%</span>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-4 mb-2">
+                            <div class="p-2 border rounded bg-success bg-opacity-10">
+                                <small class="text-muted d-block">Activity</small>
+                                <span class="fw-bold text-success">8%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glucose Risk Table -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white py-3 border-0 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="mb-0"><i class="fas fa-vial text-info me-2"></i>Blood Glucose Risk Levels</h5>
+                        <p class="text-muted small mb-0">Fasting plasma glucose (mg/dL) classification</p>
+                    </div>
+                    <button class="btn btn-sm btn-outline-primary" id="toggleTable">
+                        <i class="fas fa-expand-alt me-1"></i> Expand
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="py-3">
+                                        <i class="fas fa-layer-group me-1"></i> Level
+                                    </th>
+                                    <th class="py-3">
+                                        <i class="fas fa-ruler me-1"></i> mg/dL Range
+                                    </th>
+                                    <th class="py-3">
+                                        <i class="fas fa-exclamation-triangle me-1"></i> Risk Category
+                                    </th>
+                                    <th class="py-3">
+                                        <i class="fas fa-clipboard-check me-1"></i> Suggested Action
+                                    </th>
+                                    <th class="py-3 text-center">
+                                        <i class="fas fa-chart-pie me-1"></i> Prevalence
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="table-danger">
+                                    <td class="fw-bold">
+                                        <i class="fas fa-skull-crossbones me-1"></i> Danger - High
+                                    </td>
+                                    <td class="fw-bold">≥ 250</td>
+                                    <td><span class="badge bg-danger">Very High</span></td>
+                                    <td>Immediate medical attention</td>
+                                    <td class="text-center">5%</td>
+                                </tr>
+                                <tr class="table-warning">
+                                    <td class="fw-bold">
+                                        <i class="fas fa-exclamation-circle me-1"></i> High
+                                    </td>
+                                    <td class="fw-bold">180 – 249</td>
+                                    <td><span class="badge bg-warning">High</span></td>
+                                    <td>Consult doctor within 1 week</td>
+                                    <td class="text-center">15%</td>
+                                </tr>
+                                <tr class="table-info">
+                                    <td class="fw-bold">
+                                        <i class="fas fa-minus-circle me-1"></i> Borderline
+                                    </td>
+                                    <td class="fw-bold">120 – 179</td>
+                                    <td><span class="badge bg-info">Medium</span></td>
+                                    <td>Monitor every 3 months</td>
+                                    <td class="text-center">25%</td>
+                                </tr>
+                                <tr class="table-success">
+                                    <td class="fw-bold">
+                                        <i class="fas fa-check-circle me-1"></i> Normal
+                                    </td>
+                                    <td class="fw-bold">70 – 119</td>
+                                    <td><span class="badge bg-success">Low</span></td>
+                                    <td>Annual screening</td>
+                                    <td class="text-center">50%</td>
+                                </tr>
+                                <tr class="table-primary">
+                                    <td class="fw-bold">
+                                        <i class="fas fa-arrow-down me-1"></i> Low
+                                    </td>
+                                    <td class="fw-bold">&lt; 70</td>
+                                    <td><span class="badge bg-primary">Medium</span></td>
+                                    <td>Consult doctor if symptomatic</td>
+                                    <td class="text-center">5%</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer bg-white border-0">
+                        <div class="alert alert-secondary small mb-0">
+                            <i class="fas fa-lightbulb me-2"></i>
+                            <strong>Clinical Insight:</strong> Abnormal glucose levels significantly increase
+                            cardiovascular risk. Patients with diabetes have 2-4x higher risk of heart disease.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Takeaways -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);">
+                <div class="card-body p-4">
+                    <h5 class="mb-3"><i class="fas fa-key me-2 text-primary"></i>Key Takeaways</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-primary bg-opacity-10 p-2 rounded-circle me-3">
+                                        <i class="fas fa-1 text-primary"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Age is the strongest predictor</h6>
+                                    <p class="small text-muted mb-0">Cardiovascular risk increases exponentially after
+                                        age 40</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-danger bg-opacity-10 p-2 rounded-circle me-3">
+                                        <i class="fas fa-2 text-danger"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Hypertension is highly prevalent</h6>
+                                    <p class="small text-muted mb-0">75% of cases involve elevated blood pressure</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-success bg-opacity-10 p-2 rounded-circle me-3">
+                                        <i class="fas fa-3 text-success"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Lifestyle factors are modifiable</h6>
+                                    <p class="small text-muted mb-0">Smoking cessation and activity reduce risk
+                                        significantly</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <div class="flex-shrink-0">
+                                    <div class="bg-info bg-opacity-10 p-2 rounded-circle me-3">
+                                        <i class="fas fa-4 text-info"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1">Regular screening is essential</h6>
+                                    <p class="small text-muted mb-0">Annual checkups recommended for high-risk groups
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="alert alert-warning border-0 shadow-sm mb-4">
+        <div class="d-flex align-items-center">
+            <div class="flex-shrink-0 me-3">
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+            </div>
+            <div class="flex-grow-1">
+                <h6 class="alert-heading mb-1">Medical Disclaimer</h6>
+                <p class="small mb-0">
+                    These insights show general statistical patterns from predictive modeling and are not a substitute
+                    for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician
+                    or other qualified health provider with any questions you may have regarding a medical condition.
+                </p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Toggle table view
+        document.getElementById('toggleTable').addEventListener('click', function () {
+            const table = document.querySelector('.table-responsive');
+            table.classList.toggle('table-lg');
+            const icon = this.querySelector('i');
+            if (table.classList.contains('table-lg')) {
+                icon.className = 'fas fa-compress-alt me-1';
+                this.innerHTML = '<i class="fas fa-compress-alt me-1"></i> Collapse';
+            } else {
+                icon.className = 'fas fa-expand-alt me-1';
+                this.innerHTML = '<i class="fas fa-expand-alt me-1"></i> Expand';
+            }
+        });
+
+        // AGE CHART - Enhanced
+        new Chart(document.getElementById("ageChart"), {
+            type: "line",
+            data: {
+                labels: ["20-29", "30-39", "40-49", "50-59", "60+"],
+                datasets: [{
+                    label: "Heart Disease Prevalence",
+                    data: [5, 15, 30, 55, 75],
+                    borderColor: "#667eea",
+                    backgroundColor: "rgba(102, 126, 234, 0.1)",
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: "#764ba2",
+                    pointBorderColor: "#fff",
+                    pointBorderWidth: 2,
+                    pointRadius: 6,
+                    pointHoverRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: "rgba(0,0,0,0.8)",
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 13 },
+                        callbacks: {
+                            label: function (context) {
+                                return `Risk: ${context.raw}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: "rgba(0,0,0,0.05)" },
+                        ticks: {
+                            callback: function (value) {
+                                return value + "%";
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // BP CHART - Enhanced
+        new Chart(document.getElementById("bpChart"), {
+            type: "doughnut",
+            data: {
+                labels: ["Normal BP", "Elevated BP"],
+                datasets: [{
+                    data: [25, 75],
+                    backgroundColor: ["#2ecc71", "#e74c3c"],
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                    hoverOffset: 15
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: "70%",
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: { padding: 20 }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `${context.label}: ${context.raw}% of cases`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // CHOLESTEROL CHART - Enhanced
+        new Chart(document.getElementById("cholChart"), {
+            type: "bar",
+            data: {
+                labels: ["Normal", "Borderline", "High"],
+                datasets: [{
+                    label: "Risk Percentage",
+                    data: [30, 45, 70],
+                    backgroundColor: [
+                        "rgba(46, 204, 113, 0.8)",
+                        "rgba(241, 196, 15, 0.8)",
+                        "rgba(231, 76, 60, 0.8)"
+                    ],
+                    borderColor: [
+                        "#2ecc71",
+                        "#f1c40f",
+                        "#e74c3c"
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function (value) {
+                                return value + "%";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // LIFESTYLE CHART - Enhanced
+        new Chart(document.getElementById("lifeChart"), {
+            type: "radar",
+            data: {
+                labels: ["Smoking", "Alcohol", "Inactivity", "Poor Diet", "Stress"],
+                datasets: [{
+                    label: "Risk Increase",
+                    data: [65, 40, 60, 55, 50],
+                    backgroundColor: "rgba(155, 89, 182, 0.2)",
+                    borderColor: "#9b59b6",
+                    pointBackgroundColor: "#9b59b6",
+                    pointBorderColor: "#fff",
+                    pointHoverBackgroundColor: "#fff",
+                    pointHoverBorderColor: "#9b59b6"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            callback: function (value) {
+                                return value + "%";
+                            },
+                            backdropColor: "transparent"
+                        }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // FEATURE IMPORTANCE - Enhanced
+        new Chart(document.getElementById("featureChart"), {
+            type: "bar",
+            data: {
+                labels: ["Age", "Blood Pressure", "Cholesterol", "Glucose", "Physical Activity", "Smoking", "BMI", "Family History"],
+                datasets: [{
+                    label: "Feature Importance",
+                    data: [0.32, 0.28, 0.20, 0.12, 0.08, 0.06, 0.04, 0.03],
+                    backgroundColor: [
+                        "rgba(102, 126, 234, 0.8)",
+                        "rgba(231, 76, 60, 0.8)",
+                        "rgba(241, 196, 15, 0.8)",
+                        "rgba(52, 152, 219, 0.8)",
+                        "rgba(46, 204, 113, 0.8)",
+                        "rgba(155, 89, 182, 0.8)",
+                        "rgba(149, 165, 166, 0.8)",
+                        "rgba(230, 126, 34, 0.8)"
+                    ],
+                    borderColor: [
+                        "#667eea",
+                        "#e74c3c",
+                        "#f1c40f",
+                        "#3498db",
+                        "#2ecc71",
+                        "#9b59b6",
+                        "#95a5a6",
+                        "#e67e22"
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return `Impact: ${(context.raw * 100).toFixed(0)}%`;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 0.35,
+                        ticks: {
+                            callback: function (value) {
+                                return (value * 100).toFixed(0) + "%";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
