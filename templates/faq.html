@@ -1,0 +1,424 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="container mt-5 pt-4">
+    <!-- Page Header -->
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-primary">
+            <i class="fas fa-question-circle me-2"></i>Frequently Asked Questions
+        </h1>
+        <p class="text-muted">
+            Find answers to common questions about HeartAI
+        </p>
+    </div>
+
+    <!-- FAQ Categories -->
+    <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+        <button class="btn btn-primary px-3 py-2 category-btn active" data-category="all">
+            All Questions
+        </button>
+        <button class="btn btn-outline-primary px-3 py-2 category-btn" data-category="general">
+            General
+        </button>
+        <button class="btn btn-outline-primary px-3 py-2 category-btn" data-category="technical">
+            Technical
+        </button>
+        <button class="btn btn-outline-primary px-3 py-2 category-btn" data-category="medical">
+            Medical
+        </button>
+        <button class="btn btn-outline-primary px-3 py-2 category-btn" data-category="privacy">
+            Privacy
+        </button>
+    </div>
+
+    <!-- FAQ Content -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- General Questions -->
+            <div class="faq-section mb-4" data-category="general">
+                <h4 class="mb-3 text-primary">General Questions</h4>
+                <div class="accordion" id="generalAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#general1">
+                                <span class="faq-question">What is HeartAI and how does it work?</span>
+                            </button>
+                        </h2>
+                        <div id="general1" class="accordion-collapse collapse show" data-bs-parent="#generalAccordion">
+                            <div class="accordion-body">
+                                <p>HeartAI is an AI-powered system that predicts heart disease risk using machine
+                                    learning. It analyzes health parameters like age, blood pressure, cholesterol, and
+                                    lifestyle factors to provide risk assessments.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#general2">
+                                <span class="faq-question">Who should use HeartAI?</span>
+                            </button>
+                        </h2>
+                        <div id="general2" class="accordion-collapse collapse" data-bs-parent="#generalAccordion">
+                            <div class="accordion-body">
+                                <p>HeartAI is designed for:</p>
+                                <ul>
+                                    <li>Individuals for personal health awareness</li>
+                                    <li>Healthcare professionals as a supplementary tool</li>
+                                    <li>Researchers and students studying ML in healthcare</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 3 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#general3">
+                                <span class="faq-question">Is HeartAI free to use?</span>
+                            </button>
+                        </h2>
+                        <div id="general3" class="accordion-collapse collapse" data-bs-parent="#generalAccordion">
+                            <div class="accordion-body">
+                                <div class="alert alert-success">
+                                    <strong>Yes!</strong> HeartAI is completely free and open-source.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Technical Questions -->
+            <div class="faq-section mb-4" data-category="technical">
+                <h4 class="mb-3 text-primary">Technical Questions</h4>
+                <div class="accordion" id="technicalAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#tech1">
+                                <span class="faq-question">What ML algorithms does HeartAI use?</span>
+                            </button>
+                        </h2>
+                        <div id="tech1" class="accordion-collapse collapse" data-bs-parent="#technicalAccordion">
+                            <div class="accordion-body">
+                                <p>HeartAI primarily uses:</p>
+                                <ul>
+                                    <li><strong>Random Forest</strong> (74% accuracy)</li>
+                                    <li><strong>Logistic Regression</strong> (for interpretability)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#tech2">
+                                <span class="faq-question">
+                                    How is feature engineering handled in the model?
+                                </span>
+                            </button>
+                        </h2>
+                        <div id="tech2" class="accordion-collapse collapse" data-bs-parent="#technicalAccordion">
+                            <div class="accordion-body">
+                                <p>
+                                    Feature engineering involves preprocessing raw health data
+                                    before model training. This includes:
+                                </p>
+                                <ul>
+                                    <li>Scaling numerical features using StandardScaler</li>
+                                    <li>Encoding categorical variables</li>
+                                    <li>Handling missing values</li>
+                                    <li>Removing outliers using statistical methods</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Medical Questions -->
+            <div class="faq-section mb-4" data-category="medical">
+                <h4 class="mb-3 text-primary">Medical Questions</h4>
+                <div class="accordion" id="medicalAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#medical1">
+                                <span class="faq-question">Is this a medical diagnosis tool?</span>
+                            </button>
+                        </h2>
+                        <div id="medical1" class="accordion-collapse collapse" data-bs-parent="#medicalAccordion">
+                            <div class="accordion-body">
+                                <div class="alert alert-warning">
+                                    <strong>No!</strong> HeartAI is <strong>NOT</strong> a medical diagnosis tool.
+                                </div>
+                                <p>This is an educational tool only. Always consult a healthcare professional for
+                                    medical advice.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#medical2">
+                                <span class="faq-question">What health parameters are analyzed?</span>
+                            </button>
+                        </h2>
+                        <div id="medical2" class="accordion-collapse collapse" data-bs-parent="#medicalAccordion">
+                            <div class="accordion-body">
+                                <p>12 key parameters:</p>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li>Age & Gender</li>
+                                            <li>Height & Weight</li>
+                                            <li>Blood Pressure</li>
+                                            <li>Cholesterol</li>
+                                            <li>Glucose</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <ul>
+                                            <li>Smoking</li>
+                                            <li>Alcohol</li>
+                                            <li>Physical Activity</li>
+                                            <li>BMI</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Privacy Questions -->
+            <div class="faq-section mb-4" data-category="privacy">
+                <h4 class="mb-3 text-primary">Privacy & Security</h4>
+                <div class="accordion" id="privacyAccordion">
+                    <!-- Question 1 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#privacy1">
+                                <span class="faq-question">Is my data stored or shared?</span>
+                            </button>
+                        </h2>
+                        <div id="privacy1" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                            <div class="accordion-body">
+                                <div class="alert alert-success">
+                                    <strong>No personal data is stored or shared.</strong>
+                                </div>
+                                <p>All data is processed in real-time and immediately discarded.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="accordion-item border-0 mb-3">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#privacy2">
+                                <span class="faq-question">How secure is HeartAI?</span>
+                            </button>
+                        </h2>
+                        <div id="privacy2" class="accordion-collapse collapse" data-bs-parent="#privacyAccordion">
+                            <div class="accordion-body">
+                                <p>HeartAI implements:</p>
+                                <ul>
+                                    <li>HTTPS encryption</li>
+                                    <li>No data storage policy</li>
+                                    <li>Regular security updates</li>
+                                    <li>HIPAA-aligned practices</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Fix for dark mode accordion visibility */
+    .accordion-button {
+        font-weight: 500;
+        padding: 1rem;
+        background-color: white;
+        color: #212529;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(102, 126, 234, 0.1);
+        color: #667eea;
+        box-shadow: none;
+    }
+
+    /* Dark mode fixes */
+    body.dark-mode .accordion-button {
+        background-color: #1e293b;
+        color: #e2e8f0;
+        border-color: #374151;
+    }
+
+    body.dark-mode .accordion-button:not(.collapsed) {
+        background-color: rgba(102, 126, 234, 0.2);
+        color: #93c5fd;
+    }
+
+    body.dark-mode .accordion-button::after {
+        filter: invert(1) brightness(2);
+    }
+
+    body.dark-mode .accordion-body {
+        background-color: #1e293b;
+        color: #cbd5e1;
+        border-color: #374151;
+    }
+
+    .accordion-body {
+        padding: 1.25rem;
+        background-color: white;
+    }
+
+    .accordion-item {
+        border: 1px solid #dee2e6;
+        border-radius: 8px !important;
+        margin-bottom: 0.75rem;
+        overflow: hidden;
+    }
+
+    body.dark-mode .accordion-item {
+        border-color: #374151;
+    }
+
+    .category-btn.active {
+        background-color: #667eea;
+        border-color: #667eea;
+        color: white;
+    }
+
+    body.dark-mode .category-btn.active {
+        background-color: #667eea;
+        border-color: #667eea;
+    }
+
+    .faq-section {
+        border-radius: 10px;
+        padding: 1.5rem;
+        background: white;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark-mode .faq-section {
+        background: #1e293b;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        color: #cbd5e1;
+    }
+
+    body.dark-mode .faq-section h4 {
+        color: #93c5fd;
+    }
+
+    body.dark-mode .alert-success {
+        background-color: rgba(16, 185, 129, 0.2);
+        border-color: rgba(16, 185, 129, 0.3);
+        color: #a7f3d0;
+    }
+
+    body.dark-mode .alert-warning {
+        background-color: rgba(245, 158, 11, 0.2);
+        border-color: rgba(245, 158, 11, 0.3);
+        color: #fde68a;
+    }
+
+    body.dark-mode .card.bg-light {
+        background-color: #1e293b !important;
+        border-color: #374151;
+        color: #cbd5e1;
+    }
+
+    .faq-question {
+        font-weight: 500;
+    }
+
+    /* Ensure text visibility in all states */
+    .accordion-button:focus {
+        box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.25);
+        z-index: 3;
+    }
+
+    body.dark-mode .accordion-button:focus {
+        box-shadow: 0 0 0 0.25rem rgba(102, 126, 234, 0.5);
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Category filter functionality
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        const faqSections = document.querySelectorAll('.faq-section');
+
+        categoryButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                const category = this.getAttribute('data-category');
+
+                // Update active button
+                categoryButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                if (category === 'all') {
+                    // Show all sections
+                    faqSections.forEach(section => {
+                        section.style.display = 'block';
+                    });
+                } else {
+                    // Show only selected category
+                    faqSections.forEach(section => {
+                        if (section.getAttribute('data-category') === category) {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        });
+
+        // Auto-close other accordions when one is opened (optional)
+        const accordionButtons = document.querySelectorAll('.accordion-button');
+        accordionButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                // Remove show class from other accordions in the same group
+                const parentId = this.getAttribute('data-bs-target').replace('#', '');
+                const parentAccordion = document.getElementById(parentId).closest('.accordion');
+
+                // Don't auto-close if you want multiple open
+                // This code keeps only one open at a time
+                const allCollapses = parentAccordion.querySelectorAll('.accordion-collapse');
+                allCollapses.forEach(collapse => {
+                    if (collapse.id !== parentId) {
+                        const bsCollapse = new bootstrap.Collapse(collapse, { toggle: false });
+                        bsCollapse.hide();
+                    }
+                });
+            });
+        });
+    });
+</script>
+
+{% endblock %}

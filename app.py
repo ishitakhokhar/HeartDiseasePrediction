@@ -79,7 +79,6 @@ try:
 except Exception as e:
     print("Dashboard precompute failed:", e)
 
-    # Fallback values (app will still run)
     disease_data = []
     feature_names = []
     feature_values = []
@@ -174,8 +173,11 @@ def insights():
 def about():
     return render_template("about.html")
 
-# --------------------------------------------------
-# LOCAL RUN (NOT USED BY RENDER)
-# --------------------------------------------------
+# FAQ PAGE
+@app.route("/faq")
+def faq():
+    return render_template("faq.html")
+
+
 if __name__ == "__main__":
     app.run()
